@@ -31,6 +31,15 @@ class User(models.Model):
 
 class KaryaIlmiah(models.Model):
 
+    STATUS_CHOICES = (
+        ('Not Reviewed Yet', 'Not_Reviewed_Yet'),
+        ('In Review', 'In_Review'),
+        ('Done', 'Done'),
+        ('Not Assigned Yet', 'Not_Assigned_Yet'),
+        ('Requested', 'Requested'),
+        ('Done', 'Done')
+    )
+
     karil_id = models.AutoField(primary_key=True)
     pemilik = models.ForeignKey(User, on_delete=models.CASCADE)
     judul = models.CharField(max_length=None)
@@ -42,7 +51,7 @@ class KaryaIlmiah(models.Model):
     link_correspondence = models.CharField(max_length=None, blank=True, null=True)
     indexer = models.CharField(max_length=None, blank=True, null=True)
     category = models.CharField(max_length=None)
-    status = models.CharField(max_length=None)
+    status = models.CharField(choices=STATUS_CHOICES)
     promotion = models.CharField(max_length=None)
 
 class Review(models.Model):
