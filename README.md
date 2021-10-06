@@ -1,8 +1,11 @@
 # SIPRD
 ## Our Team
 Product Owner: Rifqi Hilman
+
 Scrum Master: M. Naufal Irbahanna
+
 Devops: Danny August
+
 Dev Team:
 - Avatar Putra Pertama Azka
 - Jerome Emmanuel
@@ -18,8 +21,10 @@ Sistem Informasi Peer Review Karya Ilmiah is a website designed to aid in stream
 - Python 3.9.5 or later
 - pip
 - venv
+- Docker
 
 ## How To Run This App Locally
+### Backend & Database
 1. Clone this repository
 
 ```bash
@@ -46,10 +51,36 @@ source env/bin/activate # MacOS / Linux
 pip install -r requirements.txt
 ```
 
-6. Run the server
+6. Open up another terminal tab/window in the root siprd folder
+
+7. In the root folder, run docker-compose
+```bash
+docker-compose up
+```
+
+8. In the backend directory, run make migrations
 
 ```bash
 python manage.py makemigrations
 python manage.py migrate
-python manage.py runserver
+```
+
+9. Models will have been migrated to the postgres image, restart the docker containers to run the dockerized backend.
+
+```bash
+CTRL + C # Stop the current docker containers
+docker-compose up # Restart the containers
+```
+
+### Frontend
+1. Navigate to the directory `siprd-fe`
+
+2. Install the dependencies
+```bash
+npm install
+```
+
+3. Run the server
+```bash
+npm run serve
 ```
