@@ -172,104 +172,102 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { required, email } from "vee-validate/dist/rules";
-import {
-  extend,
-  ValidationObserver,
-  ValidationProvider,
-  setInteractionMode,
-} from "vee-validate";
+    import { required,email} from 'vee-validate/dist/rules'
+    import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+    import Vue from "vue";
 
-setInteractionMode("eager");
+    setInteractionMode('eager')
 
-extend("required", {
-  ...required,
-  message: "{_field_} can not be empty",
-});
+    extend('required', {
+        ...required,
+        message: '{_field_} can not be empty',
+    })
 
-extend("email", {
-  ...email,
-  message: "Email must be valid",
-});
-export default {
-  name: "AddAccount",
-  components: {
-    ValidationProvider,
-    ValidationObserver,
-  },
-  data() {
-    return {
-      errors: [],
-      email: null,
-      username: null,
-      fullName: null,
-      password: null,
-      nip: null,
-      university: null,
-      fieldOfStudy: null,
-      position: null,
-      posSelect: [
-        "Asisten Ahli",
-        "Lektor",
-        "Lektor Kepala",
-        "Guru Besar/Professor",
-      ],
-      role: null,
-      roleSelect: ["Dosen", "Reviewer", "SDM PT", "Admin"],
-      user: {},
-    };
-  },
-  methods: {
-    submitForm() {
-      const data = {
-        username: this.username,
-        email: this.email,
-        password: this.password,
-        full_name: this.full_name,
-        university: this.university,
-        nip: this.nip,
-        field_of_study: this.fieldOfStudy,
-        position: this.position,
-        role: this.role,
-      };
-      Vue.axios
-        .post("http://localhost:8000/api/register", data)
-        .then((res) => {
-          if (res.status === 201) {
-            alert("Akun berhasil dibuat.");
-            console.log("YES");
-            this.$router.push("/welcome");
-          } else {
-            alert("Gagal");
-          }
-        })
-        .catch((err) => {
-          console.log(err.response);
-        });
-    },
+    extend('email', {
+        ...email,
+        message: 'Email must be valid',
+    })
+    export default{
+        name: "AddAccount",
+        components: {
+            ValidationProvider,
+            ValidationObserver
+        },
+        data(){
+            return {
+            errors: [],
+            email: null,
+            username: null,
+            fullName: null,
+            password: null,
+            nip: null,
+            university: null,
+            fieldOfStudy: null,
+            position: null,
+            posSelect: [
+                'Asisten Ahli',
+                'Lektor',
+                'Lektor Kepala',
+                'Guru Besar/Professor'
+            ],
+            role: null,
+            roleSelect: [
+                'Dosen',
+                'Reviewer',
+                'SDM PT',
+                'Admin'
+            ],
+            user: {},
+            }
+        },
+        methods: {
+            submitForm(){
+                const data={
+                    "username": this.username,
+                    "email": this.email,
+                    "password": this.password,
+                    "full_name": this.full_name,
+                    "university": this.university,
+                    "nip": this.nip,
+                    "field_of_study": this.fieldOfStudy,
+                    "position": this.position,
+                    "role": this.role
+                }
+                Vue.axios.post(( process.env.VUE_APP_BACKEND_URL || "" )+"/api/register",data).then((res)=>{
+                    if(res.status===201){
+                        alert("Akun berhasil dibuat.")
+                        console.log("YES")
+                        this.$router.push("/welcome")
+                    }else{
+                        alert("Gagal")
+                    }
+                }).catch(err => {
+                    console.log(err.response);
+                })
+            },
 
-    checkForm: function (e) {
-      this.$refs.observer.validate();
-      this.submitForm();
-      return;
-    },
+            checkForm: function (e) {
+                this.$refs.observer.validate()
+                this.submitForm()
+                return
+            },
 
-    loginRedir: function (e) {
-      this.$router.push("/login");
-    },
+            loginRedir: function(e){
+                this.$router.push("/login")
+            },
 
-    isEmpty(obj) {
-      return Object.keys(obj).length === 0;
-    },
-  },
+            isEmpty (obj) {
+                return Object.keys(obj).length === 0
+            }
+        },
 
-  beforeMount() {
-    console.log("test");
-    Vue.axios.post("http://localhost:8000/api/register").then((res) => {
-      this.register = res.data;
-      console.log(res);
-    });
-  },
-};
+        beforeMount(){
+            console.log("test")
+            Vue.axios.post(( process.env.VUE_APP_BACKEND_URL || "" )+"/api/register").then((res)=>{
+                this.register = res.data
+                console.log(res)
+            })
+        }
+        
+    }
 </script>
