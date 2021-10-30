@@ -1,40 +1,30 @@
 <template>
-  <v-container style="margin: auto; width: 60%; padding: 70px 0">
+  <v-container style="margin-top: 2rem; width: 60%; padding: 80px 0">
+    <h3> <a v-on:click="backRedir" style="color:black">Back </a></h3> <br>
     <validation-observer ref="observer" v-slot="{ invalid }">
-      <h3>Back</h3>
-      <h2>Edit Akun</h2>
-      <br />
+      <h2>Edit Akun</h2> <br>
       <v-form @submit.prevent="checkForm" ref="form" v-model="valid">
         <v-row>
           <v-col md="5">
-            <div v-if="google_signed != null">
-              <v-text-field
-                :value="email"
-                label="Email (Filled)"
-                filled
-                readonly
-              >
-              </v-text-field>
-            </div>
-            <div v-else>
               <validation-provider
                 v-slot="{ errors }"
-                name="email"
+                name="Email"
                 rules="required|email"
               >
                 <v-text-field
                   v-model="email"
                   :error-messages="errors"
                   label="Email*"
+                  :value="email"
+                  
                   required
                 >
                 </v-text-field>
               </validation-provider>
-            </div>
 
             <validation-provider
               v-slot="{ errors }"
-              name="username"
+              name="Username"
               rules="required"
             >
               <v-text-field
@@ -48,7 +38,7 @@
 
             <validation-provider
               v-slot="{ errors }"
-              name="university"
+              name="Universitas"
               rules="required"
             >
               <v-text-field
@@ -60,7 +50,7 @@
               </v-text-field>
             </validation-provider>
 
-            <validation-provider v-slot="{ errors }" name="fieldOfStudy">
+            <validation-provider v-slot="{ errors }" name="Bidang Keahlian">
               <v-text-field
                 v-model="fieldOfStudy"
                 :error-messages="errors"
@@ -70,7 +60,7 @@
               </v-text-field>
             </validation-provider>
 
-            <validation-provider v-slot="{ errors }" name="position">
+            <validation-provider v-slot="{ errors }" name="Jabatan">
               <v-select
                 v-model="position"
                 :items="posSelect"
@@ -84,48 +74,33 @@
           </v-col>
 
           <v-col md="5" class="ml-auto">
-            <validation-provider
-              v-slot="{ errors }"
-              name="fullname"
-              rules="required"
-            >
-              <v-text-field
-                v-model="full_name"
-                :error-messages="errors"
-                label="Nama Lengkap*"
-                required
+              <validation-provider
+                v-slot="{ errors }"
+                name="Nama Lengkap"
+                rules="required"
               >
-              </v-text-field>
-            </validation-provider>
+                <v-text-field
+                  v-model="fullName"
+                  :error-messages="errors"
+                  label="Nama Lengkap*"
+                  required
+                >
+                </v-text-field>
+              </validation-provider>
 
-            <validation-provider
-              v-slot="{ errors }"
-              name="password"
-              rules="required"
-            >
-              <v-text-field
-                v-model="password"
-                :error-messages="errors"
-                label="Password*"
-                :type="'password'"
-                required
-              >
-              </v-text-field>
-            </validation-provider>
-
-            <validation-provider v-slot="{ errors }" name="nip">
+            <validation-provider v-slot="{ errors }" name="NIP" rules="numeric">
               <v-text-field
                 v-model="nip"
                 :error-messages="errors"
                 label="NIP"
-                required
+                numeric
               >
               </v-text-field>
             </validation-provider>
 
             <validation-provider
               v-slot="{ errors }"
-              name="role"
+              name="Role"
               rules="required"
             >
               <v-select
@@ -151,18 +126,17 @@
               color="#8D38E3"
               width="100%"
             >
-              Buat Akun
+              Edit Akun
             </v-btn>
           </v-col>
           <v-col md="5" class="ml-auto">
             <v-btn
-              class="ml-auto white--text"
-              :disabled="invalid"
-              type="submit"
-              color="#8D38E3"
+              class="mr-4 white--text"
+              :disabled="false"
+              color="#2D3748"
               width="100%"
-            >
-              Cancel
+              v-on:click="backRedir"
+            > Cancel
             </v-btn>
           </v-col>
         </v-row>
@@ -172,102 +146,141 @@
 </template>
 
 <script>
-    import Vue from "vue";
-    import { required, email} from 'vee-validate/dist/rules'
-    import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+import Vue from "vue";
+import axios from "axios";
+import { required, email , numeric} from "vee-validate/dist/rules";
+import {
+  extend,
+  ValidationObserver,
+  ValidationProvider,
+  setInteractionMode,
+} from "vee-validate";
 
-    setInteractionMode('eager')
+setInteractionMode("eager");
 
-    extend('required', {
-        ...required,
-        message: '{_field_} can not be empty',
-    })
+extend("required", {
+  ...required,
+  message: "{_field_} tidak boleh kosong",
+});
 
-    extend('email', {
-        ...email,
-        message: 'Email must be valid',
-    })
-    export default{
-        name: "EditAccount",
-        components: {
-            ValidationProvider,
-            ValidationObserver
-        },
-        data(){
-            return {
-            errors: [],
-            email: null,
-            username: null,
-            fullName: null,
-            password: null,
-            nip: null,
-            university: null,
-            fieldOfStudy: null,
-            position: null,
-            posSelect: [
-                'Asisten Ahli',
-                'Lektor',
-                'Lektor Kepala',
-                'Guru Besar/Professor'
-            ],
-            role: null,
-            roleSelect: [
-                'Dosen',
-                'Reviewer',
-                'SDM PT',
-                'Admin'
-            ],
-            user: {},
-            }
-        },
-        methods: {
-            submitForm(){
-                const data={
-                    "username": this.username,
-                    "email": this.email,
-                    "password": this.password,
-                    "full_name": this.full_name,
-                    "university": this.university,
-                    "nip": this.nip,
-                    "field_of_study": this.fieldOfStudy,
-                    "position": this.position,
-                    "role": this.role
-                }
-                Vue.axios.post(( process.env.VUE_APP_BACKEND_URL || "" )+"/api/register",data).then((res)=>{
-                    if(res.status===201){
-                        alert("Akun berhasil dibuat.")
-                        console.log("YES")
-                        this.$router.push("/welcome")
-                    }else{
-                        alert("Gagal")
-                    }
-                }).catch(err => {
-                    console.log(err.response);
-                })
-            },
+extend("email", {
+  ...email,
+  message: "Email harus valid",
+});
 
-            checkForm: function (e) {
-                this.$refs.observer.validate()
-                this.submitForm()
-                return
-            },
+extend("numeric", {
+  ...numeric,
+  message: "{_field_} hanya berupa angka.",
+});
+export default {
+  name: "EditAccount",
+  components: {
+    ValidationProvider,
+    ValidationObserver,
+  },
+  data() {
+    return {
+      errors: [],
+      email: null,
+      username: null,
+      fullName: null,
+      password: null,
+      nip: null,
+      university: null,
+      fieldOfStudy: null,
+      position: null,
+      posSelect: [
+        "Asisten Ahli",
+        "Lektor",
+        "Lektor Kepala",
+        "Guru Besar/Professor",
+      ],
+      role: null,
+      roleSelect: ["Dosen", "Reviewer", "SDM PT", "Admin"],
+      userData: "",
+      config:null,
+    };
+  },
+  methods: {
+    submitForm() {
+      const data = {
+        username: this.username,
+        email: this.email,
+        password: this.password,
+        full_name: this.fullName,
+        university: this.university,
+        nip: this.nip,
+        field_of_study: this.fieldOfStudy,
+        position: this.position,
+        role: this.role,
+      };
+    if (localStorage.access) {
+      const accessToken = localStorage.access;
+      console.log("something")
+    const config={
+      headers: {
+          'Authorization': 'Bearer ' + accessToken,
+      }
+    };
 
-            loginRedir: function(e){
-                this.$router.push("/login")
-            },
-
-            isEmpty (obj) {
-                return Object.keys(obj).length === 0
-            }
-        },
-
-        beforeMount(){
-            console.log("test")
-            Vue.axios.post(( process.env.VUE_APP_BACKEND_URL || "" )+"/api/register").then((res)=>{
-                this.register = res.data
-                console.log(res)
-            })
+    Vue.axios
+      .put(( process.env.VUE_APP_BACKEND_URL || "" )+"/api/manage-users/",data,config)
+      .then((res) => {
+        console.log(res.data)
+        if (res.status === 200) {
+          // alert("Akun berhasil diedit.");
+          this.$router.push("/Success");
+        } else {
+          alert("Gagal");
         }
-        
-    }
+      })
+      
+          
+      .catch((err) => {
+        // TODO: Make this output more user-friendly!!!
+        // Clean string up with a function?
+        console.log(err);
+        // var responseErrors = JSON.stringify(err.response.data);
+        // console.log(responseErrors);
+        // var errMsg = "Edit gagal, errors: " + responseErrors;
+        // alert(errMsg);
+      });
+    }},
+
+    checkForm: function (e) {
+      this.$refs.observer.validate();
+      this.submitForm();
+      return;
+    },
+
+    backRedir: function (e) {
+      this.$router.push("/Success");
+    },
+  },
+
+  beforeMount() {
+      if (localStorage.access) {
+      const accessToken = localStorage.access;
+      const config = {
+        headers: { Authorization: "Bearer " + accessToken },
+      };
+      Vue.axios.get(( process.env.VUE_APP_BACKEND_URL || "" )+"/api/user", config).then((res) => {
+        if (res.status === 200) {
+          this.userData = res.data;
+          this.email=res.data.email;
+          this.username=res.data.username;
+          this.fullName=res.data.full_name;
+          this.password=res.data.password;
+          this.university=res.data.university;
+          this.nip=res.data.nip;
+          this.fieldOfStudy=res.data.field_of_study;
+          this.role=res.data.role;
+          this.position=res.data.position;
+        }
+      });
+      } else {
+      this.$router.push("/");
+      } 
+  },
+};
 </script>
