@@ -21,7 +21,8 @@
     "vue-google-signin-button": "^1.0.4",
     "vue-google-signin-button-directive": "^1.0.3",
     "vue-router": "^3.2.0",
-    "vuetify": "^2.4.0"
+    "vuetify": "^2.4.0",
+    "webpack": "^4.45.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",

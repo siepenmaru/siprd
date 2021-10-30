@@ -8,6 +8,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 
 class UserSerializer(serializers.ModelSerializer):
+    date_joined = serializers.DateTimeField(required=False)
     class Meta:
         model = User
         fields = [
@@ -20,7 +21,8 @@ class UserSerializer(serializers.ModelSerializer):
             'field_of_study',
             'position',
             'role',
-            'approved'
+            'approved',
+            'date_joined'
         ]
         extra_kwargs = {
             'password': {'write_only': True}
@@ -34,6 +36,9 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+    def get_validation_exclusions(self):
+        exclusions = super(UserSerializer, self).get_validation_exclusions()
+        return exclusions + ['date_joined']
 
 class ResetPasswordEmailRequestSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=25)

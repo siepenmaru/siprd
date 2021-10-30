@@ -6,11 +6,12 @@ import Register from "../views/Register.vue";
 import AddAccount from "../views/AddAccount.vue";
 import EditAccount from "../views/EditAccount.vue";
 import Success from "../views/Success.vue";
+import Dashboard from "../views/Dashboard.vue";
 import RegisterSuccess from "../views/RegisterSuccess.vue";
+import AccountList from "../views/AccountList.vue";
 import ForgetPasswordRequest from "../views/ForgetPasswordRequest.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 import TokenError from "../views/TokenError.vue";
-import Dashboard from "../views/Dashboard.vue";
 
 Vue.use(VueRouter);
 
@@ -94,6 +95,11 @@ const routes: Array<RouteConfig> = [
     path: "/dashboard",
     name: "Dashboard",
     component: Dashboard,
+  },
+  {
+    path: "/account-list",
+    name: "AccountList",
+    component: AccountList,
   },
 ];
 
