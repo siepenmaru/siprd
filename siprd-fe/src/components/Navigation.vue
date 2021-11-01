@@ -21,12 +21,12 @@
         </li>
       </ul>
       <div class="icon">
-        <i
+        <em
           @click="toggleMobileNav"
           v-show="mobile"
           class="far fa-bars"
           :class="{ 'icon-active': mobileNav }"
-        ></i>
+        ></em>
       </div>
       <transition name="mobile-nav">
         <ul v-show="mobileNav" class="dropdown-nav">
@@ -54,7 +54,7 @@
 
 <script>
 export default {
-  name: "navigation",
+  name: 'navigation',
   data() {
     return {
       scrolledNav: null,
@@ -64,11 +64,11 @@ export default {
     };
   },
   created() {
-    window.addEventListener("resize", this.checkScreen);
+    window.addEventListener('resize', this.checkScreen);
     this.checkScreen();
   },
   mounted() {
-    window.addEventListener("scroll", this.updateScroll);
+    window.addEventListener('scroll', this.updateScroll);
   },
   methods: {
     toggleMobileNav() {
@@ -91,7 +91,6 @@ export default {
       }
       this.mobile = false;
       this.mobileNav = false;
-      return;
     },
   },
 };
