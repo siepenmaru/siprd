@@ -1,4 +1,7 @@
 # SIPRD
+
+**NOTE:** This repository was ported over from Universitas Indonesia's gitlab instance.
+
 ## Our Team
 Product Owner: Rifqi Hilman
 
