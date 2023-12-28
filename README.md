@@ -2,6 +2,10 @@
 
 **NOTE:** This repository was ported over from Universitas Indonesia's gitlab instance.
 
+**See the project's showcase page [here](https://gallery.cs.ui.ac.id/project/ppl/36b62edd-bdc0-4183-a1f7-c82c0a86eb86)!**
+
+---
+
 ## Our Team
 Product Owner: Rifqi Hilman
 
